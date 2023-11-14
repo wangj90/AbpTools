@@ -1,0 +1,47 @@
+﻿@page "/base64-encryption"
+@using System.Text
+@using Microsoft.Extensions.Options
+@using System.Reflection
+@using Volo.Abp.Security.Encryption
+
+<PageTitle>Base64 Encryption</PageTitle>
+
+<h1>Base64 Encryption</h1>
+
+<FluentTextArea Style="width: 100%; margin-bottom: 24px;" Rows="4" @bind-Value=DecrptedString Resize="TextAreaResize.Vertical" />
+<FluentDivider Style="margin-bottom: 24px;" />
+<FluentGrid Style="margin-bottom: 24px;">
+    <FluentGridItem>
+        <FluentSelect TOption="Encoding" Items="Encodings" Appearance="Appearance.Filled" OptionText="@(x => x.EncodingName)" @bind-SelectedOption=Encoding Label="字符编码" />
+    </FluentGridItem>
+    <FluentGridItem Style="align-items: center;" Justify="JustifyContent.SpaceBetween" Gap="1em">
+        <FluentButton Appearance="Appearance.Accent" IconEnd="@(new Icons.Regular.Size16.ArrowDown())" OnClick=Encrypt>加密</FluentButton>
+        <FluentButton Appearance="Appearance.Accent" IconEnd="@(new Icons.Regular.Size16.ArrowUp())" OnClick=Decrypt>解密</FluentButton>
+    </FluentGridItem>
+</FluentGrid>
+<FluentDivider Style="margin-bottom: 24px;" />
+<FluentTextArea Style="width: 100%;" Rows="4" @bind-Value=EncrptedString Resize="TextAreaResize.Vertical" />
+
+@code {
+    protected IEnumerable<Encoding> Encodings = [Encoding.UTF8, Encoding.ASCII, Encoding.Unicode, Encoding.Latin1, Encoding.BigEndianUnicode, Encoding.UTF32];
+
+    protected Encoding Encoding { get; set; } = Encoding.UTF8;
+
+    protected string? EncrptedString { get; set; }
+    protected string? DecrptedString { get; set; }
+
+    protected void Encrypt()
+    {
+        if (!DecrptedString.IsNullOrWhiteSpace())
+        {
+            EncrptedString = Convert.ToBase64String(Encoding.GetBytes(DecrptedString!));
+        }
+    }
+    protected void Decrypt()
+    {
+        if (!EncrptedString.IsNullOrWhiteSpace())
+        {
+            DecrptedString = Encoding.GetString(Convert.FromBase64String(EncrptedString!));
+        }
+    }
+}
