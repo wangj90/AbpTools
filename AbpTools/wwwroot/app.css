@@ -1,3 +1,7 @@
+html, body, fluent-design-system-provider, .main-layout-navmenu {
+    height: 100%;
+}
+
 .body-content {
     padding-left: 8px;
 }
