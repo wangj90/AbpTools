@@ -1,11 +1,9 @@
-﻿using Volo.Abp.AspNetCore;
-using Volo.Abp.Autofac;
-using Volo.Abp.Modularity;
+﻿using Volo.Abp.Modularity;
 using Volo.Abp.Security;
 
 namespace AbpTools
 {
-    [DependsOn(typeof(AbpSecurityModule), typeof(AbpAspNetCoreModule), typeof(AbpAutofacModule))]
+    [DependsOn(typeof(AbpSecurityModule))]
     public class AbpToolsModule : AbpModule
     {
     }

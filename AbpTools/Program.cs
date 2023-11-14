@@ -1,5 +1,6 @@
 using AbpTools;
 using AbpTools.Components;
+using Volo.Abp;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,12 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Host.UseAutofac();
 await builder.Services.AddApplicationAsync<AbpToolsModule>();
 
 var app = builder.Build();
 
-await app.InitializeApplicationAsync();
+await app.Services.GetRequiredService<IAbpApplicationWithExternalServiceProvider>().InitializeAsync(app.Services);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
