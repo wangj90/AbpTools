@@ -1,0 +1,51 @@
+﻿@page "/string-encryption"
+@using System.Text
+@using Microsoft.Extensions.Options
+@using Volo.Abp.Security.Encryption
+
+<PageTitle>String Encryption</PageTitle>
+
+<h1>String Encryption</h1>
+
+<FluentTextArea Style="width: 100%; margin-bottom: 24px;" @bind-Value=DecrptedString Resize="TextAreaResize.Vertical" />
+<FluentDivider Style="margin-bottom: 24px;" />
+<FluentGrid Style="margin-bottom: 24px;">
+    <FluentGridItem>
+        <FluentNumberField @bind-Value=Options.Value.Keysize Label="Keysize" />
+    </FluentGridItem>
+    <FluentGridItem>
+        <FluentTextField @bind-Value=Options.Value.DefaultPassPhrase Label="DefaultPassPhrase" />
+    </FluentGridItem>
+    <FluentGridItem>
+        <FluentTextField Value="@Encoding.ASCII.GetString(Options.Value.InitVectorBytes)" ValueChanged="@(s => Encoding.ASCII.GetBytes(s))" Label="InitVectorBytes" />
+    </FluentGridItem>
+    <FluentGridItem>
+        <FluentTextField Value="@Encoding.ASCII.GetString(Options.Value.DefaultSalt)" ValueChanged="@(s => Encoding.ASCII.GetBytes(s))" Label="DefaultSalt" />
+    </FluentGridItem>
+    <FluentGridItem Style="align-items: center;" Justify="JustifyContent.SpaceBetween" Gap="1em">
+        <FluentButton Appearance="Appearance.Accent" IconEnd="@(new Icons.Regular.Size16.ArrowDown())" OnClick=Encrypt>加密</FluentButton>
+        <FluentButton Appearance="Appearance.Accent" IconEnd="@(new Icons.Regular.Size16.ArrowUp())" OnClick=Decrypt>解密</FluentButton>
+    </FluentGridItem>
+</FluentGrid>
+<FluentDivider Style="margin-bottom: 24px;" />
+<FluentTextArea Style="width: 100%;" @bind-Value=EncrptedString Resize="TextAreaResize.Vertical" />
+
+@code {
+    [Inject]
+    protected IStringEncryptionService StringEncryptionService { get; set; } = default!;
+
+    [Inject]
+    protected IOptions<AbpStringEncryptionOptions> Options { get; set; } = default!;
+
+    protected string? EncrptedString { get; set; }
+    protected string? DecrptedString { get; set; }
+
+    protected void Encrypt()
+    {
+        EncrptedString = StringEncryptionService.Encrypt(DecrptedString);
+    }
+    protected void Decrypt()
+    {
+        DecrptedString = StringEncryptionService.Decrypt(EncrptedString);
+    }
+}

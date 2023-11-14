@@ -1,3 +1,4 @@
+using AbpTools;
 using AbpTools.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,7 +7,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Host.UseAutofac();
+await builder.Services.AddApplicationAsync<AbpToolsModule>();
+
 var app = builder.Build();
+
+await app.InitializeApplicationAsync();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -24,4 +30,4 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
-app.Run();
+await app.RunAsync();
