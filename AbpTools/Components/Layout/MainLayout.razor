@@ -1,23 +1,13 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
-
-<div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
-</div>
+<FluentMainLayout NavMenuTitle="Navigation menu">
+    <Header>Abp Tools</Header>
+    <Body>
+        @Body
+    </Body>
+    <NavMenuContent>
+        <FluentNavLink Icon="@(new Icons.Regular.Size20.Home())" Href="/" Match="NavLinkMatch.All">Home</FluentNavLink>
+        <FluentNavLink Icon="@(new Icons.Regular.Size20.Add())" Href="counter">Counter</FluentNavLink>
+        <FluentNavLink Icon="@(new Icons.Regular.Size20.TimeAndWeather())" Href="weather">Weather</FluentNavLink>
+    </NavMenuContent>
+</FluentMainLayout>
