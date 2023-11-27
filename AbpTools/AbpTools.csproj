@@ -8,8 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" />
-	<PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" />
-	<PackageReference Include="Volo.Abp.Security" />
+    <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" />
+    <PackageReference Include="Volo.Abp.Security" />
   </ItemGroup>
 
 </Project>
