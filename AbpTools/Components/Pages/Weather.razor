@@ -12,8 +12,8 @@
 }
 else
 {
-    <FluentDataGrid Items="@forecasts">
-        <PropertyColumn Property="@(p => p.Date)" Title="Date" Format="d" />
+    <FluentDataGrid Id="weathergrid" Items=@forecasts GridTemplateColumns="1fr 1fr 1fr 2fr" TGridItem=WeatherForecast>
+        <PropertyColumn Property="@(p => p.Date)" Title="Date" />
         <PropertyColumn Property="@(p => p.TemperatureC)" Title="Temp. (C)" />
         <PropertyColumn Property="@(p => p.TemperatureF)" Title="Temp. (F)" />
         <PropertyColumn Property="@(p => p.Summary)" Title="Summary" />

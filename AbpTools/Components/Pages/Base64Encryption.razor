@@ -28,6 +28,7 @@
     protected Encoding Encoding { get; set; } = Encoding.UTF8;
 
     protected string? EncrptedString { get; set; }
+
     protected string? DecrptedString { get; set; }
 
     protected void Encrypt()
@@ -37,6 +38,7 @@
             EncrptedString = Convert.ToBase64String(Encoding.GetBytes(DecrptedString!));
         }
     }
+
     protected void Decrypt()
     {
         if (!EncrptedString.IsNullOrWhiteSpace())

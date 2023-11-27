@@ -38,12 +38,14 @@
     protected IOptions<AbpStringEncryptionOptions> Options { get; set; } = default!;
 
     protected string? EncrptedString { get; set; }
+
     protected string? DecrptedString { get; set; }
 
     protected void Encrypt()
     {
         EncrptedString = StringEncryptionService.Encrypt(DecrptedString);
     }
+
     protected void Decrypt()
     {
         DecrptedString = StringEncryptionService.Decrypt(EncrptedString);
