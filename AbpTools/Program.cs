@@ -1,5 +1,6 @@
 using AbpTools;
 using AbpTools.Components;
+using Microsoft.FluentUI.AspNetCore.Components;
 using Volo.Abp;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddFluentUIComponents();
 
 await builder.Services.AddApplicationAsync<AbpToolsModule>();
 
