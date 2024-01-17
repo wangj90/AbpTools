@@ -1,0 +1,79 @@
+﻿@page "/large-json-file-formatter"
+@using Volo.Abp.Content
+@using System.Text
+@using System.Text.Json
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+
+<PageTitle>Large Json File Formatter</PageTitle>
+
+<h1>Large Json File Formatter</h1>
+
+<FluentInputFile @ref="@fileUploader"
+                 DragDropZoneVisible="false"
+                 Mode="InputFileMode.SaveToTemporaryFolder"
+                 AnchorId="UploadButton"
+                 Accept=".json"
+                 MaximumFileSize="@(1000 * 1024 * 1024)"
+                 OnProgressChange="@(e =>
+                     {
+                         progressPercent = e.ProgressPercent; 
+                         fileName = e.ProgressTitle;
+                     })"
+                 OnCompleted="@OnCompletedAsync" />
+
+<FluentProgress Min="0" Max="100" Visible="@(progressPercent > 0)" Value="@progressPercent" />
+<FluentLabel Alignment="HorizontalAlignment.Center">
+    @fileName
+</FluentLabel>
+<FluentButton Id="UploadButton" Appearance="Appearance.Accent">
+    Upload files
+</FluentButton>
+@code {
+
+    protected FluentInputFile? fileUploader = default!;
+
+    protected int? progressPercent;
+
+    protected string? fileName;
+
+    protected IJSObjectReference? module;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            module = await JS.InvokeAsync<IJSObjectReference>("import", "./Components/Pages/LargeJsonFileFormatter.razor.js");        }
+    }
+
+    protected async Task OnCompletedAsync(IEnumerable<FluentInputFileEventArgs> files)
+    {
+        if (files.Any())
+        {
+            var file = files.First();
+            progressPercent = fileUploader!.ProgressPercent;
+            fileName = file.Name;
+            var str = file.LocalFile?.OpenText().ReadToEnd();
+            var deserialize = JsonSerializer.Deserialize<dynamic>(str);
+            var serialize = JsonSerializer.Serialize(deserialize, new JsonSerializerOptions()
+                {
+                    PropertyNameCaseInsensitive = true,
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    WriteIndented = true
+                });
+            using var streamRef = new DotNetStreamReference(new MemoryStream(Encoding.UTF8.GetBytes(serialize)));
+            if (module is not null)
+            {
+                await module.InvokeVoidAsync("downloadFileFromStream", $"format-{fileName}", streamRef);
+            }
+        }
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        if (module is not null)
+        {
+            await module.DisposeAsync();
+        }
+    }
+}
